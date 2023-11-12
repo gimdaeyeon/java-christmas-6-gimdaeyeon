@@ -1,6 +1,7 @@
 package christmas.util;
 
 import static christmas.util.ErrorMessage.INVALID_DATE_RANGE;
+import static christmas.util.ErrorMessage.INVALID_ORDER_FORMAT;
 
 public class Validator {
 
@@ -16,8 +17,15 @@ public class Validator {
 
     private static boolean isValidDateRange(String input) {
         int day = Integer.parseInt(input);
-        return day>=1&&day<=31;
+//        이 부분의 매직 넘버 나중에 상수로 교체
+        return day >= 1 && day <= 31;
     }
+
+//    public static void validateOrder(String orderInput) {
+//        if (true) {
+//            throw new IllegalArgumentException(INVALID_ORDER_FORMAT.getMessage());
+//        }
+//    }
 
 
 }
