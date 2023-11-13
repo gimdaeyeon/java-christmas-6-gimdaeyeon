@@ -35,6 +35,10 @@ public class MenuBoard {
         map.put(name, new Menu(name, price, menuCategory));
     }
 
+    public boolean isContains(String menuName){
+        return menus.containsKey(menuName);
+    }
+
     @Override
     public String toString() {
         return menus.toString();
