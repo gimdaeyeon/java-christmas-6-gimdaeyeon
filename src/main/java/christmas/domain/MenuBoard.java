@@ -1,5 +1,6 @@
 package christmas.domain;
 
+import christmas.data.MenuData;
 import christmas.dto.menu.Menu;
 import christmas.dto.menu.MenuCategory;
 
@@ -10,25 +11,25 @@ import static christmas.data.MenuData.*;
 
 public class MenuBoard {
 
-    private final Map<String, Menu> menus;
+    private static Map<String, Menu> menus;
 
-    public MenuBoard(String menuData) {
-        this.menus = initializeMenuMap(menuData);
+    static{
+        menus = initializeMenuMap(MenuData.selectAll());
     }
 
-    private Map<String, Menu> initializeMenuMap(String menuData) {
+    private static Map<String, Menu> initializeMenuMap(String menuData) {
         Map<String, Menu> map = new HashMap<>();
         parseAndAddMenus(menuData.split(MENU_DELIMITER), map);
         return map;
     }
 
-    private void parseAndAddMenus(String[] menus, Map<String, Menu> map) {
+    private static void parseAndAddMenus(String[] menus, Map<String, Menu> map) {
         for (String menu : menus) {
             createAndAddMenu(menu.split(DATA_DELIMITER), map);
         }
     }
 
-    private void createAndAddMenu(String[] menu, Map<String, Menu> map) {
+    private static void createAndAddMenu(String[] menu, Map<String, Menu> map) {
         String name = menu[NAME_INDEX];
         int price = Integer.parseInt(menu[PRICE_INDEX]);
         MenuCategory menuCategory = MenuCategory.fromDescription(menu[CATEGORY_INDEX]);
@@ -38,6 +39,11 @@ public class MenuBoard {
     public boolean isContains(String menuName){
         return menus.containsKey(menuName);
     }
+    public Menu getMenu(String name){
+        return menus.get(name);
+    }
+
+
 
     @Override
     public String toString() {

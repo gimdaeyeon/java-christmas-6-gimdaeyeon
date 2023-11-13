@@ -3,6 +3,7 @@ package christmas.data;
 public class MenuData {
     public static final String MENU_DELIMITER = "\n";
     public static final String DATA_DELIMITER = ",";
+    public static final String INPUT_DATA_DELIMITER = "-";
     public static final int NAME_INDEX = 0;
     public static final int PRICE_INDEX = 1;
     public static final int CATEGORY_INDEX = 2;

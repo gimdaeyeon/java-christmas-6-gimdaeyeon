@@ -24,4 +24,18 @@ class ValidatorTest {
         }).doesNotThrowAnyException();
     }
 
+    @ValueSource(strings = {"소고기파스타-2,레드와인-1,초코케이크-1",
+            "제로콜라-2,레드와인-1"})
+    @ParameterizedTest
+    void 주문_입력_검증_테스트_예외상황(String order){
+        assertThatThrownBy(()->{
+            Validator.validateOrder(order);
+        }).isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("[ERROR]")
+                .hasMessageContaining("유효하지 않은 주문입니다");
+    }
+
+
+
+
 }
