@@ -5,6 +5,8 @@ import christmas.domain.MenuBoard;
 import christmas.dto.menu.MenuCategory;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import static christmas.data.MenuData.DATA_DELIMITER;
 import static christmas.data.MenuData.INPUT_DATA_DELIMITER;
@@ -14,6 +16,7 @@ import static christmas.util.ErrorMessage.INVALID_ORDER_FORMAT;
 public class Validator {
 
     private static MenuBoard menuBoard;
+    private static final String regex = "^([가-힣a-zA-Z]+-\\d+)(,[가-힣a-zA-Z]+-\\d+)*$";
 
     static{
         menuBoard = new MenuBoard();
@@ -36,26 +39,45 @@ public class Validator {
     }
 
     public static void validateOrder(String orderInput) {
-        String[] orders = orderInput.split(DATA_DELIMITER);
-        if (!(isMenuListed(orders))) {
+//        주문형식이 맞는지 정규표현식으로 검사
+        if(!Pattern.matches(regex,orderInput)){
             throw new IllegalArgumentException(INVALID_ORDER_FORMAT.getMessage());
         }
-        if((checkIfOnlyBeverages(orders))){
+
+        String[] orders = orderInput.split(DATA_DELIMITER);
+        List<String> menuNames =getMenuNameValues(orders);
+        List<Integer> menuCounts = getOrderCountValues(orders);
+        if (!(isMenuListed(menuNames))) {
+            throw new IllegalArgumentException(INVALID_ORDER_FORMAT.getMessage());
+        }
+        if((checkIfOnlyBeverages(menuNames))){
             throw new IllegalArgumentException(INVALID_ORDER_FORMAT.getMessage());
         }
     }
 
-    private static boolean isMenuListed(String[] orders) {
-        return Arrays.stream(orders)
-                .map(menu -> menu.substring(0, menu.indexOf(INPUT_DATA_DELIMITER)))
+    private static boolean isMenuListed(List<String> orderMenus) {
+        return orderMenus.stream()
                 .allMatch(menuBoard::isContains);
     }
 
-    private static boolean checkIfOnlyBeverages(String[] orders) {
-        return Arrays.stream(orders)
-                .map(menu -> menu.substring(0, menu.indexOf(INPUT_DATA_DELIMITER)))
+    private static boolean checkIfOnlyBeverages(List<String> orderMenus) {
+        return orderMenus.stream()
                 .map(menuBoard::getMenu)
                 .allMatch(menu -> menu.menuCategory() == MenuCategory.BEVERAGE);
     }
+
+    private static List<String> getMenuNameValues(String[] orders){
+        return Arrays.stream(orders)
+                .map(menu -> menu.substring(0, menu.indexOf(INPUT_DATA_DELIMITER)))
+                .toList();
+    }
+
+    private static List<Integer> getOrderCountValues(String[] orders){
+        return Arrays.stream(orders)
+                .map(menu -> menu.substring(menu.indexOf(INPUT_DATA_DELIMITER)+1, menu.length()))
+                .map(Integer::parseInt)
+                .toList();
+    }
+
 
 }
