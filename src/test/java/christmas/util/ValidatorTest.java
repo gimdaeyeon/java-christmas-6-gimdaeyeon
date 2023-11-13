@@ -40,5 +40,12 @@ class ValidatorTest {
                 .hasMessageContaining("유효하지 않은 주문입니다");
     }
 
+    @Test
+    void 메뉴주문_입력_검증_테스트_정상입력값() {
+        String order = "티본스테이크-2,양송이수프-4,바비큐립-1,초코케이크-2,샴페인-3";
+        assertThatCode(() -> {
+            Validator.validateOrder(order);
+        }).doesNotThrowAnyException();
+    }
 
 }

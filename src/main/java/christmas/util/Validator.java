@@ -47,24 +47,30 @@ public class Validator {
 
         String[] orders = orderInput.split(DATA_DELIMITER);
         List<String> menuNames = getMenuNameValues(orders);
-
         List<Integer> menuCounts = getOrderCountValues(orders);
-        if (!(isMenuListed(menuNames))
-                && checkMenuItemsWithinRange(menuCounts)
-                && isMenuCountWithinLimit(menuCounts)
-                && isMenuInputUnique(menuNames)) {
-            throw new IllegalArgumentException(INVALID_ORDER_FORMAT.getMessage());
-        }
-        if ((checkIfOnlyBeverages(menuNames))) {
+
+        validateMenuListed(menuNames);
+        validateMenuInputUnique(menuNames);
+        validateOnlyBeverages(menuNames);
+        validateMenuItemsWithinRange(menuCounts);
+        validateMenuCountWithinLimit(menuCounts);
+    }
+
+    private static void validateMenuListed(List<String> menuNames){
+        if(!isMenuListed(menuNames)){
             throw new IllegalArgumentException(INVALID_ORDER_FORMAT.getMessage());
         }
     }
-
     private static boolean isMenuListed(List<String> orderMenus) {
         return orderMenus.stream()
                 .allMatch(menuBoard::isContains);
     }
 
+    private static void validateOnlyBeverages(List<String> orderMenus){
+        if(checkIfOnlyBeverages(orderMenus)){
+            throw new IllegalArgumentException(INVALID_ORDER_FORMAT.getMessage());
+        }
+    }
     private static boolean checkIfOnlyBeverages(List<String> orderMenus) {
         return orderMenus.stream()
                 .map(menuBoard::getMenu)
@@ -84,20 +90,35 @@ public class Validator {
                 .toList();
     }
 
+    private static void validateMenuItemsWithinRange(List<Integer> counts){
+        if(!checkMenuItemsWithinRange(counts)){
+            throw new IllegalArgumentException(INVALID_ORDER_FORMAT.getMessage());
+        }
+    }
     private static boolean checkMenuItemsWithinRange(List<Integer> counts) {
         return counts.stream()
                 .allMatch(i -> i >= MIN_ORDER_QUANTITY && i <= MAX_ORDER_QUANTITY);
     }
 
+    private static void validateMenuCountWithinLimit(List<Integer> counts){
+        if(!isMenuCountWithinLimit(counts)){
+            throw new IllegalArgumentException(INVALID_ORDER_FORMAT.getMessage());
+        }
+    }
     private static boolean isMenuCountWithinLimit(List<Integer> counts) {
         return counts.stream().mapToInt(i -> i)
                 .sum() <= MAX_ORDER_QUANTITY;
     }
 
+    private static void validateMenuInputUnique(List<String> orderMenus){
+        if(!isMenuInputUnique(orderMenus)){
+            throw new IllegalArgumentException(INVALID_ORDER_FORMAT.getMessage());
+        }
+    }
     private static boolean isMenuInputUnique(List<String> orderMenus) {
         int size = orderMenus.size();
         return orderMenus.stream().distinct()
-                .count() != size;
+                .count() == size;
     }
 
 }
