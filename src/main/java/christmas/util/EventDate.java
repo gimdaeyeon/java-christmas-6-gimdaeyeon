@@ -1,5 +1,6 @@
 package christmas.util;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
 
@@ -13,6 +14,16 @@ public class EventDate {
 
         public static int getEventEndDate(){
             return YearMonth.of(EVENT_YEAR, EVENT_MONTH).atEndOfMonth().getDayOfMonth();
+        }
+
+        public static boolean isWeekend(int visitDate){
+            DayOfWeek dayOfVisit = calculateDayOfWeek(visitDate);
+            return dayOfVisit== DayOfWeek.FRIDAY|| dayOfVisit== DayOfWeek.SATURDAY;
+        }
+
+        private static DayOfWeek calculateDayOfWeek(int visitDate){
+            return LocalDate.of(EVENT_YEAR, EVENT_MONTH, visitDate)
+                    .getDayOfWeek();
         }
 
 

@@ -2,6 +2,7 @@ package christmas.domain;
 
 import christmas.dto.event.Event;
 import christmas.dto.menu.Menu;
+import christmas.dto.menu.MenuCategory;
 import christmas.dto.order.OrderItem;
 
 import java.util.ArrayList;
@@ -71,5 +72,16 @@ public class Order {
     }
     public int getVisitDate() {
         return visitDate;
+    }
+
+    public int getDessertCount(){
+        return (int)orderItems.stream()
+                .filter(i->i.getMenuCategory()== MenuCategory.DESSERT)
+                .count();
+    }
+    public int getMainCount(){
+        return (int)orderItems.stream()
+                .filter(i->i.getMenuCategory()== MenuCategory.MAIN)
+                .count();
     }
 }

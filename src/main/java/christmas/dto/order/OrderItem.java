@@ -1,6 +1,7 @@
 package christmas.dto.order;
 
 import christmas.dto.menu.Menu;
+import christmas.dto.menu.MenuCategory;
 
 public record OrderItem(Menu menu, int quantity) {
     public static final int MENU_NAME_INDEX = 0;
@@ -8,6 +9,9 @@ public record OrderItem(Menu menu, int quantity) {
 
     public int getMenuPrice(){
         return menu.menuPrice();
+    }
+    public MenuCategory getMenuCategory(){
+        return menu.menuCategory();
     }
     @Override
     public String toString() {
