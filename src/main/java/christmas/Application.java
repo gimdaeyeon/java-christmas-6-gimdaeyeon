@@ -6,6 +6,8 @@ import christmas.ui.OutputView;
 
 public class Application {
     public static void main(String[] args) {
-        new ChristmasController(new InputView(),new OutputView());
+
+        new ChristmasController(new InputView(),new OutputView())
+                .getBenefitLists();
     }
 }

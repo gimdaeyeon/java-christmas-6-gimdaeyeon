@@ -4,7 +4,7 @@ import christmas.dto.event.Event;
 import christmas.dto.menu.Menu;
 import christmas.dto.menu.MenuCategory;
 import christmas.dto.order.OrderItem;
-import christmas.util.NumberFormatter;
+
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -19,16 +19,21 @@ public class Order {
     private final List<OrderItem> orderItems;
     private final int visitDate;
     private final int totalAmount;
-    private final EventManager eventManager;
+    private EventManager eventManager;
 
     private final String ORDER_HEADER ="<주문 메뉴>\n";
     private final String TOTAL_AMOUNT_HEADER ="<할인 전 총주문 금액>\n";
+    private final String AMOUNT_AFTER_DISCOUNT_HEADER = "<할인 후 예상 결제 금액>\n";
+
 
     public Order(String orderInput, int visitDate) {
         this.orderItems = initializeOrder(orderInput);
         this.visitDate = visitDate;
         totalAmount =calculateTotalOrderAmount();
-        eventManager = new EventManager(this);
+    }
+
+    public void createEventManager(Order order){
+        eventManager = new EventManager(order);
     }
 
     private List<OrderItem> initializeOrder(String orderInput) {
@@ -58,9 +63,19 @@ public class Order {
     }
 
     public String formatTotalOrderAmountSummary(){
-        return TOTAL_AMOUNT_HEADER+ NumberFormatter.format(calculateTotalOrderAmount())+"원\n";
+        return TOTAL_AMOUNT_HEADER+
+                NumberFormat.getNumberInstance()
+                        .format(calculateTotalOrderAmount())+"원\n";
     }
 
+    public String formatAmountAfterDiscount(){
+        return String.format("%s%s원\n",AMOUNT_AFTER_DISCOUNT_HEADER,
+                NumberFormat.getNumberInstance().format(calculateAfterDiscountAmount()));
+    }
+
+    private int calculateAfterDiscountAmount(){
+        return totalAmount - eventManager.getTotalDiscountAmount();
+    }
 
 
     public int calculateTotalOrderAmount(){
@@ -85,13 +100,26 @@ public class Order {
     public int getDessertCount(){
         return (int)orderItems.stream()
                 .filter(i->i.getMenuCategory()== MenuCategory.DESSERT)
-                .count();
+                .mapToInt(OrderItem::quantity)
+                .sum();
     }
     public int getMainCount(){
         return (int)orderItems.stream()
                 .filter(i->i.getMenuCategory()== MenuCategory.MAIN)
                 .count();
     }
+
+    public String getGiftMessage(){
+        return eventManager.formatGiftSummary();
+    }
+
+    public String getBenefitMessage(){
+        return eventManager.formatBenefitSummary();
+    }
+    public String getDiscountMessage(){
+        return eventManager.formatTotalBenefitAmountSummary()+"\n";
+    }
+
 
 
 }

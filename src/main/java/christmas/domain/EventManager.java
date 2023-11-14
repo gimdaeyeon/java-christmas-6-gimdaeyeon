@@ -4,6 +4,7 @@ import christmas.dto.event.Event;
 import christmas.dto.event.EventCategory;
 import christmas.util.EventDate;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,6 +15,7 @@ import static christmas.util.EventDate.EVENT_YEAR;
 public class EventManager {
 
     private final List<Event> events;
+
     private static final int D_DAY_DEFAULT_DISCOUNT_AMOUNT = 1000;
     private static final int D_DAY_ADDITIONAL_DISCOUNT_AMOUNT = 100;
     private static final int D_DAY_LAST_DATE = 25;
@@ -22,6 +24,7 @@ public class EventManager {
     private static final int CHAMPAGNE_PRICES = 25000;
 
     private static final String BENEFIT_HEADER = "<혜택 내역>\n";
+    private static final String BENEFIT_AMOUNT_HEADER = "<총혜택 금액>\n";
     private static final String GIFT_HEADER = "<증정 메뉴>\n";
     private static final String GIFT_PRODUCT = "샴페인 1개\n";
     private static final String NOTTING = "없음\n";
@@ -32,7 +35,7 @@ public class EventManager {
     }
 
     private List<Event> initializeEvent(Order order) {
-        if (order.isEventSubject()) {
+        if (!order.isEventSubject()) {
             return List.of();
         }
         List<Event> list = new ArrayList<>();
@@ -45,6 +48,8 @@ public class EventManager {
         checkDayOfWeekAndDiscount(order, events);
         registerSpecialDiscount(order, events);
         registerPresentEvent(order, events);
+        System.out.println("-------------------------------------");
+        System.out.println(events);
     }
 
     private void registerDdayDiscount(int visitDate, List<Event> events) {
@@ -66,6 +71,7 @@ public class EventManager {
     }
 
     private void registerWeekdayDiscount(Order order, List<Event> events) {
+        System.out.println(order.getDessertCount());
         events.add(new Event(EventCategory.WEEKDAY, order.getDessertCount() * EVENT_YEAR));
     }
 
@@ -85,11 +91,20 @@ public class EventManager {
         }
     }
 
-    private int getTotalDiscountAmount(List<Event> events){
-        return events.stream().mapToInt(Event::discountAmount).sum();
+    public int getTotalDiscountAmount(){
+        return events.stream()
+//                .filter(i->i.eventCategory()!=EventCategory.GIFT)
+                .mapToInt(Event::discountAmount).sum();
+    }
+    public String formatTotalBenefitAmountSummary(){
+        return String.format("%s-%s원",BENEFIT_AMOUNT_HEADER, NumberFormat.getNumberInstance()
+                .format(getTotalDiscountAmount()));
     }
 
     public String formatBenefitSummary(){
+        if(events.isEmpty()){
+            return BENEFIT_HEADER + NOTTING;
+        }
         return BENEFIT_HEADER +
                 events.stream().map(Event::toString)
                         .collect(Collectors.joining(MENU_DELIMITER))

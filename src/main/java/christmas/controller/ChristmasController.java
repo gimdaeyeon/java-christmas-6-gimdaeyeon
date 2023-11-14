@@ -16,5 +16,23 @@ public class ChristmasController {
         String orderStr = inputView.inputOrder();
 
         order = new Order(orderStr,visitDate);
+        order.createEventManager(order);
     }
+
+    public void getBenefitLists(){
+        outputView.printResultBefitList(getResultMessage());
+    }
+
+    private String getResultMessage(){
+        return order.formatOrderMenuSummary() +"\n"+
+                order.formatTotalOrderAmountSummary() +"\n"+
+                order.getGiftMessage() +"\n"+
+                order.getBenefitMessage() +"\n"+
+                order.getDiscountMessage() +"\n"+
+                order.formatAmountAfterDiscount();
+    }
+
+
+
+
 }
