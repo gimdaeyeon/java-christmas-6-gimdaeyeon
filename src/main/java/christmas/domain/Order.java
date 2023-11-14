@@ -14,7 +14,7 @@ import static christmas.dto.order.OrderItem.MENU_QUANTITY_INDEX;
 public class Order {
     List<OrderItem> orderItems;
     int visitDate;
-    int amount;
+    int totalAmount;
     int discountAmount;
 
     private final String ORDER_HEADER ="<주문 메뉴>\n";
@@ -22,6 +22,7 @@ public class Order {
     public Order(String orderInput, int visitDate) {
         this.orderItems = initializeOrder(orderInput);
         this.visitDate = visitDate;
+        totalAmount =calculateTotalOrderAmount();
     }
 
     private List<OrderItem> initializeOrder(String orderInput) {
@@ -43,11 +44,17 @@ public class Order {
         orderItems.add(new OrderItem(menu, menuQuantity));
     }
 
-    public String formatOrderSummary(){
+    public String formatOrderMenuSummary(){
         return ORDER_HEADER +
                 orderItems.stream().map(OrderItem::toString)
                         .collect(Collectors.joining(MENU_DELIMITER))
                 +MENU_DELIMITER;
+    }
+
+    public int calculateTotalOrderAmount(){
+        return orderItems.stream()
+                .mapToInt(i-> i.quantity()*i.getMenuPrice())
+                .sum();
     }
 
 }
