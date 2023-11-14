@@ -6,18 +6,26 @@ import christmas.util.EventDate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static christmas.data.MenuData.MENU_DELIMITER;
 import static christmas.util.EventDate.EVENT_YEAR;
 
 public class EventManager {
 
-    private List<Event> events;
+    private final List<Event> events;
     private static final int D_DAY_DEFAULT_DISCOUNT_AMOUNT = 1000;
     private static final int D_DAY_ADDITIONAL_DISCOUNT_AMOUNT = 100;
     private static final int D_DAY_LAST_DATE = 25;
     private static final int SPECIAL_DISCOUNT_AMOUNT = 1000;
     private static final int GIFT_EVENT_THRESHOLD = 120000;
     private static final int CHAMPAGNE_PRICES = 25000;
+
+    private static final String BENEFIT_HEADER = "<혜택 내역>\n";
+    private static final String GIFT_HEADER = "<증정 메뉴>\n";
+    private static final String GIFT_PRODUCT = "샴페인 1개\n";
+    private static final String NOTTING = "없음\n";
+
 
     public EventManager(Order order) {
         this.events = initializeEvent(order);
@@ -81,5 +89,22 @@ public class EventManager {
         return events.stream().mapToInt(Event::discountAmount).sum();
     }
 
+    public String formatBenefitSummary(){
+        return BENEFIT_HEADER +
+                events.stream().map(Event::toString)
+                        .collect(Collectors.joining(MENU_DELIMITER))
+                +MENU_DELIMITER;
+    }
+
+    public String formatGiftSummary(){
+        if (isContainGiftEvent()){
+            return GIFT_HEADER+GIFT_PRODUCT;
+        }
+        return GIFT_HEADER+NOTTING;
+    }
+    public boolean isContainGiftEvent(){
+        return events.stream().map(Event::eventCategory)
+                .anyMatch(e -> e == EventCategory.GIFT);
+    }
 
 }

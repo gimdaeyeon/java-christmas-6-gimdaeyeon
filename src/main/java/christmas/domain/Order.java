@@ -4,7 +4,9 @@ import christmas.dto.event.Event;
 import christmas.dto.menu.Menu;
 import christmas.dto.menu.MenuCategory;
 import christmas.dto.order.OrderItem;
+import christmas.util.NumberFormatter;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,12 +16,13 @@ import static christmas.dto.order.OrderItem.MENU_NAME_INDEX;
 import static christmas.dto.order.OrderItem.MENU_QUANTITY_INDEX;
 
 public class Order {
-    private List<OrderItem> orderItems;
-    private int visitDate;
-    private int totalAmount;
-    private EventManager eventManager;
+    private final List<OrderItem> orderItems;
+    private final int visitDate;
+    private final int totalAmount;
+    private final EventManager eventManager;
 
     private final String ORDER_HEADER ="<주문 메뉴>\n";
+    private final String TOTAL_AMOUNT_HEADER ="<할인 전 총주문 금액>\n";
 
     public Order(String orderInput, int visitDate) {
         this.orderItems = initializeOrder(orderInput);
@@ -53,6 +56,12 @@ public class Order {
                         .collect(Collectors.joining(MENU_DELIMITER))
                 +MENU_DELIMITER;
     }
+
+    public String formatTotalOrderAmountSummary(){
+        return TOTAL_AMOUNT_HEADER+ NumberFormatter.format(calculateTotalOrderAmount())+"원\n";
+    }
+
+
 
     public int calculateTotalOrderAmount(){
         return orderItems.stream()
