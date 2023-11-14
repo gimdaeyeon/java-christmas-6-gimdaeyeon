@@ -17,7 +17,6 @@ public class Order {
     private List<OrderItem> orderItems;
     private int visitDate;
     private int totalAmount;
-    private int discountAmount;
     private EventManager eventManager;
 
     private final String ORDER_HEADER ="<주문 메뉴>\n";
@@ -84,4 +83,6 @@ public class Order {
                 .filter(i->i.getMenuCategory()== MenuCategory.MAIN)
                 .count();
     }
+
+
 }

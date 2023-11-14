@@ -1,15 +1,14 @@
 package christmas.dto.event;
 
-public class Event {
-    private EventCategory eventCategory;
-    private int discountAmount;
+import java.text.NumberFormat;
 
-    public Event(EventCategory eventCategory) {
-        this.eventCategory = eventCategory;
-    }
-    public Event(EventCategory eventCategory, int discountAmount) {
-        this.eventCategory = eventCategory;
-        this.discountAmount = discountAmount;
+public record Event(EventCategory eventCategory, int discountAmount) {
+    @Override
+    public String toString() {
+        return String.format("%s: -%s원",eventCategory.getDisplayName(),discountAmountFormat());
     }
 
+    public String discountAmountFormat() {
+        return NumberFormat.getNumberInstance().format(discountAmount);
+    }
 }
