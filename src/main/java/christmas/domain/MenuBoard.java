@@ -39,7 +39,7 @@ public class MenuBoard {
     public boolean isContains(String menuName){
         return menus.containsKey(menuName);
     }
-    public Menu getMenu(String name){
+    public static Menu getMenu(String name){
         return menus.get(name);
     }
 

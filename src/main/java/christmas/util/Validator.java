@@ -52,7 +52,6 @@ public class Validator {
         validateMenuListed(menuNames);
         validateMenuInputUnique(menuNames);
         validateOnlyBeverages(menuNames);
-        validateMenuItemsWithinRange(menuCounts);
         validateMenuCountWithinLimit(menuCounts);
     }
 
@@ -73,7 +72,7 @@ public class Validator {
     }
     private static boolean checkIfOnlyBeverages(List<String> orderMenus) {
         return orderMenus.stream()
-                .map(menuBoard::getMenu)
+                .map(MenuBoard::getMenu)
                 .allMatch(menu -> menu.menuCategory() == MenuCategory.BEVERAGE);
     }
 
@@ -88,16 +87,6 @@ public class Validator {
                 .map(menu -> menu.substring(menu.indexOf(INPUT_DATA_DELIMITER) + 1))
                 .map(Integer::parseInt)
                 .toList();
-    }
-
-    private static void validateMenuItemsWithinRange(List<Integer> counts){
-        if(!checkMenuItemsWithinRange(counts)){
-            throw new IllegalArgumentException(INVALID_ORDER_FORMAT.getMessage());
-        }
-    }
-    private static boolean checkMenuItemsWithinRange(List<Integer> counts) {
-        return counts.stream()
-                .allMatch(i -> i >= MIN_ORDER_QUANTITY && i <= MAX_ORDER_QUANTITY);
     }
 
     private static void validateMenuCountWithinLimit(List<Integer> counts){
