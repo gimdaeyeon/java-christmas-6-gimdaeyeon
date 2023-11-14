@@ -1,5 +1,6 @@
 package christmas.domain;
 
+import christmas.dto.event.Event;
 import christmas.dto.menu.Menu;
 import christmas.dto.order.OrderItem;
 
@@ -12,10 +13,11 @@ import static christmas.dto.order.OrderItem.MENU_NAME_INDEX;
 import static christmas.dto.order.OrderItem.MENU_QUANTITY_INDEX;
 
 public class Order {
-    List<OrderItem> orderItems;
-    int visitDate;
-    int totalAmount;
-    int discountAmount;
+    private List<OrderItem> orderItems;
+    private int visitDate;
+    private int totalAmount;
+    private int discountAmount;
+    private EventManager eventManager;
 
     private final String ORDER_HEADER ="<주문 메뉴>\n";
 
@@ -23,6 +25,7 @@ public class Order {
         this.orderItems = initializeOrder(orderInput);
         this.visitDate = visitDate;
         totalAmount =calculateTotalOrderAmount();
+        eventManager = new EventManager(this);
     }
 
     private List<OrderItem> initializeOrder(String orderInput) {
@@ -56,5 +59,17 @@ public class Order {
                 .mapToInt(i-> i.quantity()*i.getMenuPrice())
                 .sum();
     }
+    public boolean isEventSubject(){
+        return totalAmount >=10000;
+    }
 
+    public List<Event> getAppliedEvents(){
+        List<Event> events = new ArrayList<>();
+
+
+        return events;
+    }
+    public int getVisitDate() {
+        return visitDate;
+    }
 }

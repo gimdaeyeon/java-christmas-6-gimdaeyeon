@@ -35,8 +35,7 @@ public class Validator {
 
     private static boolean isValidDateRange(String input) {
         int day = Integer.parseInt(input);
-//        이 부분의 매직 넘버 나중에 상수로 교체
-        return day >= 1 && day <= 31;
+        return day >= EventDate.getEventStartDate() && day <= EventDate.getEventEndDate();
     }
 
     public static void validateOrder(String orderInput) {
