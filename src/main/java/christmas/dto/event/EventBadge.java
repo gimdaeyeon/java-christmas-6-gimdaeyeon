@@ -1,6 +1,6 @@
 package christmas.dto.event;
 
-import static christmas.domain.EventManager.NOTTING;
+import static christmas.util.EventConsts.NOTTING;
 
 public enum EventBadge {
     STAR("별",5000),
@@ -34,6 +34,4 @@ public enum EventBadge {
         }
         return NOTTING;
     }
-
-
 }
