@@ -29,7 +29,8 @@ public class ChristmasController {
                 order.getGiftMessage() +"\n"+
                 order.getBenefitMessage() +"\n"+
                 order.getDiscountMessage() +"\n"+
-                order.formatAmountAfterDiscount();
+                order.formatAmountAfterDiscount()+"\n"+
+                order.getEventBadgeMessage()+"\n";
     }
 
 

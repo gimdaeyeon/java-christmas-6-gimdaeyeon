@@ -87,12 +87,7 @@ public class Order {
         return totalAmount >=10000;
     }
 
-    public List<Event> getAppliedEvents(){
-        List<Event> events = new ArrayList<>();
 
-
-        return events;
-    }
     public int getVisitDate() {
         return visitDate;
     }
@@ -120,6 +115,9 @@ public class Order {
         return eventManager.formatTotalBenefitAmountSummary()+"\n";
     }
 
+    public String getEventBadgeMessage(){
+        return eventManager.formatEventBadgeSummary();
+    }
 
 
 }
