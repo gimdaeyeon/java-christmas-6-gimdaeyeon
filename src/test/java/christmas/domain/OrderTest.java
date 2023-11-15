@@ -25,6 +25,7 @@ class OrderTest {
         int result = 142000;
 
         assertThat(order.calculateTotalOrderAmount()).isEqualTo(result);
+
     }
 
 
