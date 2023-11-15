@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 import static christmas.data.MenuData.MENU_DELIMITER;
 import static christmas.dto.event.EventBadge.getBadgeToBenefitAmount;
-import static christmas.util.EventConsts.*;
+import static christmas.util.EventConst.*;
 import static christmas.util.EventDate.EVENT_YEAR;
 
 public class EventManager {

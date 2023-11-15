@@ -1,6 +1,6 @@
 package christmas.dto.event;
 
-import static christmas.util.EventConsts.NOTTING;
+import static christmas.util.EventConst.NOTTING;
 
 public enum EventBadge {
     STAR("별",5000),

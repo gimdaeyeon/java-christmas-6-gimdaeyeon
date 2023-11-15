@@ -1,6 +1,6 @@
 package christmas.util;
 
-public class EventConsts {
+public class EventConst {
     public static final int D_DAY_DEFAULT_DISCOUNT_AMOUNT = 1000;
     public static final int D_DAY_ADDITIONAL_DISCOUNT_AMOUNT = 100;
     public static final int D_DAY_LAST_DATE = 25;
